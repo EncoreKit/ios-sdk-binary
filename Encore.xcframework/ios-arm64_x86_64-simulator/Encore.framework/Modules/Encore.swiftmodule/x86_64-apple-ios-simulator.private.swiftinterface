@@ -1,0 +1,393 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0 effective-5.10 (swiftlang-6.0.0.9.10 clang-1600.0.26.2)
+// swift-module-flags: -target x86_64-apple-ios15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name Encore
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+import AVKit
+import Combine
+import CoreMotion
+import CryptoKit
+import Foundation
+import Foundation/*.Data*/
+import Foundation/*.Date*/
+import Foundation/*.URL*/
+import SafariServices
+import StoreKit
+import Swift
+import SwiftUI
+import UIKit
+import _AVKit_SwiftUI
+import _Concurrency
+import _StoreKit_SwiftUI
+import _StringProcessing
+import _SwiftConcurrencyShims
+import os.lock
+import os
+public enum EncoreError : Swift.Error, Foundation.LocalizedError, Swift.Sendable {
+  case transport(EncoreError.TransportError)
+  case `protocol`(EncoreError.ProtocolError)
+  case integration(EncoreError.IntegrationError)
+  case domain(Swift.String)
+  public enum TransportError : Swift.Error, Foundation.LocalizedError, Swift.Sendable {
+    case network(any Swift.Error)
+    case persistence(any Swift.Error)
+    public var errorDescription: Swift.String? {
+      get
+    }
+    public var underlying: (any Swift.Error)? {
+      get
+    }
+  }
+  public enum ProtocolError : Swift.Error, Foundation.LocalizedError, Swift.Sendable {
+    case http(status: Swift.Int, message: Swift.String?)
+    case api(status: Swift.Int, code: Swift.String?, message: Swift.String)
+    case decoding(any Swift.Error)
+    public var errorDescription: Swift.String? {
+      get
+    }
+    public var underlying: (any Swift.Error)? {
+      get
+    }
+  }
+  public enum IntegrationError : Swift.Error, Foundation.LocalizedError, Swift.Sendable {
+    case notConfigured
+    case invalidApiKey
+    case invalidURL
+    public var errorDescription: Swift.String? {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public var errorDescription: Swift.String? {
+    get
+  }
+  public var underlying: (any Swift.Error)? {
+    get
+  }
+}
+extension EncoreError : Swift.Equatable {
+  public static func == (lhs: EncoreError, rhs: EncoreError) -> Swift.Bool
+}
+extension EncoreError.TransportError : Swift.Equatable {
+  public static func == (lhs: EncoreError.TransportError, rhs: EncoreError.TransportError) -> Swift.Bool
+}
+extension EncoreError.ProtocolError : Swift.Equatable {
+  public static func == (lhs: EncoreError.ProtocolError, rhs: EncoreError.ProtocolError) -> Swift.Bool
+}
+extension EncoreError.IntegrationError : Swift.Equatable {
+  public static func == (a: EncoreError.IntegrationError, b: EncoreError.IntegrationError) -> Swift.Bool
+}
+public enum EncorePurchaseResult : Swift.Sendable {
+  case purchased
+  case cancelled
+  case pending
+  public static func == (a: EncorePurchaseResult, b: EncorePurchaseResult) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_Concurrency.MainActor public protocol EncorePurchaseController : AnyObject {
+  @_Concurrency.MainActor func purchase(_ request: PurchaseRequest) async throws -> EncorePurchaseResult
+}
+public struct PurchaseRequest : Swift.Sendable {
+  public let productId: Swift.String
+  public let placementId: Swift.String?
+  public let promoOfferId: Swift.String?
+  public init(productId: Swift.String, placementId: Swift.String? = nil, promoOfferId: Swift.String? = nil)
+}
+public struct UserAttributes : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let email: Swift.String?
+  public let firstName: Swift.String?
+  public let lastName: Swift.String?
+  public let phoneNumber: Swift.String?
+  public let postalCode: Swift.String?
+  public let city: Swift.String?
+  public let state: Swift.String?
+  public let countryCode: Swift.String?
+  public let latitude: Swift.String?
+  public let longitude: Swift.String?
+  public let dateOfBirth: Swift.String?
+  public let gender: Swift.String?
+  public let language: Swift.String?
+  public let subscriptionTier: Swift.String?
+  public let monthsSubscribed: Swift.String?
+  public let billingCycle: Swift.String?
+  public let lastPaymentAmount: Swift.String?
+  public let lastActiveDate: Swift.String?
+  public let totalSessions: Swift.String?
+  @available(*, deprecated, message: "Use config.entitlements.iap.productId from remote config instead")
+  public let iapProductId: Swift.String?
+  public let custom: [Swift.String : Swift.String]
+  public init(email: Swift.String? = nil, firstName: Swift.String? = nil, lastName: Swift.String? = nil, phoneNumber: Swift.String? = nil, postalCode: Swift.String? = nil, city: Swift.String? = nil, state: Swift.String? = nil, countryCode: Swift.String? = nil, latitude: Swift.String? = nil, longitude: Swift.String? = nil, dateOfBirth: Swift.String? = nil, gender: Swift.String? = nil, language: Swift.String? = nil, subscriptionTier: Swift.String? = nil, monthsSubscribed: Swift.String? = nil, billingCycle: Swift.String? = nil, lastPaymentAmount: Swift.String? = nil, lastActiveDate: Swift.String? = nil, totalSessions: Swift.String? = nil, iapProductId: Swift.String? = nil, custom: [Swift.String : Swift.String] = [:])
+  public static func == (a: UserAttributes, b: UserAttributes) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+@available(*, deprecated, renamed: "UserAttributes")
+public typealias EncoreAttributes = UserAttributes
+public enum UseCase : Swift.String, Swift.Sendable, Swift.CaseIterable, Swift.Equatable {
+  case reduceChurn
+  case rewardUsers
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [UseCase]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [UseCase] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum UnlockMode : Swift.Sendable {
+  case optimistic
+  case strict
+  public static func == (a: UnlockMode, b: UnlockMode) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum Cohort : Swift.String, Swift.Codable, Swift.Sendable {
+  case treatment
+  case control
+  case notEnrolled
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension Encore {
+  public enum LogLevel : Swift.Int, Swift.Comparable, Swift.Sendable {
+    case none
+    case error
+    case warn
+    case info
+    case debug
+    public static func < (lhs: Encore.LogLevel, rhs: Encore.LogLevel) -> Swift.Bool
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+}
+public enum EntitlementUnit : Swift.CustomStringConvertible, Swift.Sendable {
+  case months
+  case days
+  case percent
+  case dollars
+  public var description: Swift.String {
+    get
+  }
+  public static func == (a: EntitlementUnit, b: EntitlementUnit) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum Entitlement : Swift.Sendable {
+  case freeTrial(value: Swift.Double? = nil, unit: EntitlementUnit? = nil)
+  case discount(value: Swift.Double? = nil, unit: EntitlementUnit? = nil)
+  case credit(value: Swift.Double? = nil, unit: EntitlementUnit? = nil)
+}
+public enum EntitlementScope : Swift.Sendable {
+  case verified
+  case all
+  public static func == (a: EntitlementScope, b: EntitlementScope) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum PlacementOutcome : Swift.Sendable {
+  case presentation(placementId: Swift.String, result: PresentationResult)
+  case strictUnlockVerified(transactionId: Swift.String)
+}
+public enum DismissReason : Swift.String, Swift.CaseIterable, Swift.Equatable, Swift.Sendable {
+  case userTappedClose
+  case userSwipedDown
+  case userCancelled
+  case lastOfferDeclined
+  case dismissed
+  case cooldown
+  case flowCompleted
+  case interrupted
+  case offerClaimed
+  case appBackgrounded
+  case appTerminated
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [DismissReason]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [DismissReason] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@available(*, deprecated, renamed: "DismissReason")
+public typealias NotGrantedReason = DismissReason
+public enum NotPresentedReason : Swift.Equatable, Swift.Sendable {
+  case notConfigured
+  case alreadyPresenting
+  case unsupportedOS
+  case noOffers
+  case experimentControl
+  case useCaseUnavailable
+  case error(EncoreError)
+  public static func == (a: NotPresentedReason, b: NotPresentedReason) -> Swift.Bool
+}
+public struct ClaimedOffer : Swift.Sendable, Swift.Equatable {
+  public let offerId: Swift.String
+  public let campaignId: Swift.String
+  public let advertiserName: Swift.String
+  public let transactionId: Swift.String?
+  public init(offerId: Swift.String? = nil, campaignId: Swift.String, advertiserName: Swift.String, transactionId: Swift.String? = nil)
+  public static func == (a: ClaimedOffer, b: ClaimedOffer) -> Swift.Bool
+}
+public enum AdvertiserOutcome : Swift.Sendable, Swift.Equatable {
+  case notAttempted
+  case claimed(ClaimedOffer)
+  case verified(ClaimedOffer)
+  case cooldown
+  case failed(EncoreError)
+  public static func == (a: AdvertiserOutcome, b: AdvertiserOutcome) -> Swift.Bool
+}
+public enum PublisherOutcome : Swift.Sendable, Swift.Equatable {
+  case notAttempted
+  case purchased
+  case cancelled
+  case pending
+  case failed
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: PublisherOutcome, b: PublisherOutcome) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum PresentationResult : Swift.Sendable, Swift.Equatable {
+  case notPresented(NotPresentedReason)
+  case presented(PresentationResult.Outcome)
+  public struct Outcome : Swift.Sendable, Swift.Equatable {
+    public let advertiser: AdvertiserOutcome
+    public let publisher: PublisherOutcome
+    public let dismissal: DismissReason
+    public init(advertiser: AdvertiserOutcome = .notAttempted, publisher: PublisherOutcome = .notAttempted, dismissal: DismissReason)
+    public static func == (a: PresentationResult.Outcome, b: PresentationResult.Outcome) -> Swift.Bool
+  }
+  public static func == (a: PresentationResult, b: PresentationResult) -> Swift.Bool
+}
+extension PresentationResult {
+  public var claim: ClaimedOffer? {
+    get
+  }
+  public var advertiser: AdvertiserOutcome? {
+    get
+  }
+  public var publisher: PublisherOutcome? {
+    get
+  }
+  public var dismissal: DismissReason? {
+    get
+  }
+  public var error: EncoreError? {
+    get
+  }
+}
+@available(*, deprecated, renamed: "PresentationResult")
+public typealias EncorePresentationResult = PresentationResult
+final public class Atomic<T> : @unchecked Swift.Sendable where T : Swift.Sendable {
+  public init(_ value: T)
+  final public var value: T {
+    get
+    set
+  }
+  final public func mutate(_ transform: (inout T) -> Swift.Void)
+  @discardableResult
+  final public func mutate<R>(_ transform: (inout T) -> R) -> R
+  @objc deinit
+}
+
+@_Concurrency.MainActor public protocol PlacementBuilderProtocol {
+  @_Concurrency.MainActor var id: Swift.String { get }
+  @_Concurrency.MainActor func show() async -> PresentationResult
+  @_Concurrency.MainActor func show(resume: @escaping @Sendable (PresentationResult) -> Swift.Void)
+  @_Concurrency.MainActor func makeViewController() async -> UIKit.UIViewController?
+  @_Concurrency.MainActor func makeViewController(resume: @escaping @Sendable (PresentationResult) -> Swift.Void) async -> UIKit.UIViewController?
+  @_Concurrency.MainActor func prefetch()
+  @_Concurrency.MainActor func onLoadingStateChange(_ callback: @escaping @Sendable (Swift.Bool) -> Swift.Void) -> Self
+  @_Concurrency.MainActor func useCase(_ useCase: UseCase) -> Self
+  @_Concurrency.MainActor func headline(_ text: Swift.String) -> Self
+  @_Concurrency.MainActor func subheadline(_ text: Swift.String) -> Self
+}
+extension PlacementBuilderProtocol {
+  @_Concurrency.MainActor public func show(resume: @escaping @Sendable (PresentationResult) -> Swift.Void)
+  @_Concurrency.MainActor public func prefetch()
+  @_Concurrency.MainActor public func makeViewController(resume: @escaping @Sendable (PresentationResult) -> Swift.Void) async -> UIKit.UIViewController?
+  @_Concurrency.MainActor public func makeViewController() async -> UIKit.UIViewController?
+}
+@_Concurrency.MainActor public protocol EncoreProtocol : AnyObject {
+  @_Concurrency.MainActor var isClaimEnabled: Swift.Bool { get set }
+  @_Concurrency.MainActor func configure(apiKey: Swift.String, purchaseController: (any EncorePurchaseController)?, options: Encore.Options)
+  @_Concurrency.MainActor func identify(userId: Swift.String, attributes: UserAttributes?)
+  @_Concurrency.MainActor func setUserAttributes(_ attributes: UserAttributes)
+  @_Concurrency.MainActor func reset()
+  @_Concurrency.MainActor func placement(_ id: Swift.String?) -> any PlacementBuilderProtocol
+  @_Concurrency.MainActor var outcomes: _Concurrency.AsyncStream<PlacementOutcome> { get }
+  @_Concurrency.MainActor func isActive(_ type: Entitlement, in scope: EntitlementScope) async -> Swift.Bool
+  @_Concurrency.MainActor func isActivePublisher(for type: Entitlement, in scope: EntitlementScope) -> Combine.AnyPublisher<Swift.Bool, Swift.Never>
+  @_Concurrency.MainActor func revokeEntitlements() async throws
+  @_Concurrency.MainActor func revokeEntitlements(onCompletion: @escaping (Swift.Result<Swift.Void, EncoreError>) -> Swift.Void)
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor final public class Encore : EncoreProtocol {
+  @_Concurrency.MainActor public static let shared: Encore
+  nonisolated public static var isSupported: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor final public var isClaimEnabled: Swift.Bool
+  @_Concurrency.MainActor final public func configure(apiKey: Swift.String, purchaseController: (any EncorePurchaseController)? = nil, options: Encore.Options = .init())
+  @_Concurrency.MainActor final public func identify(userId: Swift.String, attributes: UserAttributes? = nil)
+  @_Concurrency.MainActor final public func setUserAttributes(_ attributes: UserAttributes)
+  @_Concurrency.MainActor final public func reset()
+  @_Concurrency.MainActor final public var outcomes: _Concurrency.AsyncStream<PlacementOutcome> {
+    get
+  }
+  @_Concurrency.MainActor final public func placement(_ id: Swift.String? = nil) -> any PlacementBuilderProtocol
+  @_Concurrency.MainActor public static func placement(_ id: Swift.String? = nil) -> any PlacementBuilderProtocol
+  @_Concurrency.MainActor final public func isActive(_ type: Entitlement, in scope: EntitlementScope = .all) async -> Swift.Bool
+  @_Concurrency.MainActor final public func isActivePublisher(for type: Entitlement, in scope: EntitlementScope = .all) -> Combine.AnyPublisher<Swift.Bool, Swift.Never>
+  @_Concurrency.MainActor final public func revokeEntitlements() async throws
+  @_Concurrency.MainActor final public func revokeEntitlements(onCompletion: @escaping (Swift.Result<Swift.Void, EncoreError>) -> Swift.Void)
+  @objc deinit
+}
+extension Encore {
+  public struct Options : Swift.Sendable {
+    public var logLevel: Encore.LogLevel
+    public var unlock: UnlockMode
+    public init(logLevel: Encore.LogLevel = .none, unlock: UnlockMode = .optimistic)
+  }
+}
+extension EncoreError.IntegrationError : Swift.Hashable {}
+extension EncorePurchaseResult : Swift.Equatable {}
+extension EncorePurchaseResult : Swift.Hashable {}
+extension UseCase : Swift.Hashable {}
+extension UseCase : Swift.RawRepresentable {}
+extension UnlockMode : Swift.Equatable {}
+extension UnlockMode : Swift.Hashable {}
+extension Cohort : Swift.Equatable {}
+extension Cohort : Swift.Hashable {}
+extension Cohort : Swift.RawRepresentable {}
+extension Encore : Swift.Sendable {}
+extension Encore.LogLevel : Swift.Hashable {}
+extension Encore.LogLevel : Swift.RawRepresentable {}
+extension EntitlementUnit : Swift.Equatable {}
+extension EntitlementUnit : Swift.Hashable {}
+extension EntitlementScope : Swift.Equatable {}
+extension EntitlementScope : Swift.Hashable {}
+extension DismissReason : Swift.Hashable {}
+extension DismissReason : Swift.RawRepresentable {}
+extension PublisherOutcome : Swift.Hashable {}
