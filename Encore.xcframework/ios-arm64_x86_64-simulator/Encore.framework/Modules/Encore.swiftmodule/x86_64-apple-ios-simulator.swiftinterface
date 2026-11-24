@@ -1,0 +1,1092 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
+// swift-module-flags: -target x86_64-apple-ios15.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name Encore
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+import AVKit
+import Combine
+import CoreGraphics
+import CoreText
+import CryptoKit
+import Darwin
+import Foundation
+import Foundation/*.Data*/
+import Foundation/*.Date*/
+import Foundation/*.URL*/
+import ImageIO
+import Network
+import ObjectiveC
+import SafariServices
+import StoreKit
+import Swift
+import SwiftUI
+import UIKit
+import WebKit
+import _AVKit_SwiftUI
+import _Concurrency
+import _StoreKit_SwiftUI
+import _StringProcessing
+import _SwiftConcurrencyShims
+import os.lock
+import os
+public enum EncoreError : Swift.Error, Foundation.LocalizedError, Swift.Sendable {
+  case transport(EncoreError.TransportError)
+  case `protocol`(EncoreError.ProtocolError)
+  case integration(EncoreError.IntegrationError)
+  case domain(Swift.String)
+  public enum TransportError : Swift.Error, Foundation.LocalizedError, Swift.Sendable {
+    case network(any Swift.Error)
+    case persistence(any Swift.Error)
+    public var errorDescription: Swift.String? {
+      get
+    }
+    public var underlying: (any Swift.Error)? {
+      get
+    }
+  }
+  public enum ProtocolError : Swift.Error, Foundation.LocalizedError, Swift.Sendable {
+    case http(status: Swift.Int, message: Swift.String?)
+    case api(status: Swift.Int, code: Swift.String?, message: Swift.String)
+    case decoding(any Swift.Error)
+    public var errorDescription: Swift.String? {
+      get
+    }
+    public var underlying: (any Swift.Error)? {
+      get
+    }
+  }
+  public enum IntegrationError : Swift.Error, Foundation.LocalizedError, Swift.Sendable {
+    case notConfigured
+    case invalidApiKey
+    case invalidURL
+    public var errorDescription: Swift.String? {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public var errorDescription: Swift.String? {
+    get
+  }
+  public var underlying: (any Swift.Error)? {
+    get
+  }
+}
+extension EncoreError : Swift.Equatable {
+  public static func == (lhs: EncoreError, rhs: EncoreError) -> Swift.Bool
+}
+extension EncoreError.TransportError : Swift.Equatable {
+  public static func == (lhs: EncoreError.TransportError, rhs: EncoreError.TransportError) -> Swift.Bool
+}
+extension EncoreError.ProtocolError : Swift.Equatable {
+  public static func == (lhs: EncoreError.ProtocolError, rhs: EncoreError.ProtocolError) -> Swift.Bool
+}
+extension EncoreError.IntegrationError : Swift.Equatable {
+  public static func == (a: EncoreError.IntegrationError, b: EncoreError.IntegrationError) -> Swift.Bool
+}
+public enum EncorePurchaseResult : Swift.Sendable {
+  case purchased
+  case cancelled
+  case pending
+  public static func == (a: EncorePurchaseResult, b: EncorePurchaseResult) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_Concurrency.MainActor public protocol EncorePurchaseController : AnyObject {
+  @_Concurrency.MainActor func purchase(_ request: PurchaseRequest) async throws -> EncorePurchaseResult
+}
+public struct PurchaseRequest : Swift.Sendable {
+  public let productId: Swift.String
+  public let placementId: Swift.String?
+  public let promoOfferId: Swift.String?
+  public init(productId: Swift.String, placementId: Swift.String? = nil, promoOfferId: Swift.String? = nil)
+}
+public struct UserAttributes : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let email: Swift.String?
+  public let firstName: Swift.String?
+  public let lastName: Swift.String?
+  public let phoneNumber: Swift.String?
+  public let postalCode: Swift.String?
+  public let city: Swift.String?
+  public let state: Swift.String?
+  public let countryCode: Swift.String?
+  public let latitude: Swift.String?
+  public let longitude: Swift.String?
+  public let age: Swift.Int?
+  public let dateOfBirth: Swift.String?
+  public let gender: Swift.String?
+  @available(*, deprecated, message: "Use shared.setLanguage(_:). Removed in the next major version.")
+  public var language: Swift.String? {
+    get
+  }
+  public let subscriptionTier: Swift.String?
+  public let monthsSubscribed: Swift.String?
+  public let billingCycle: Swift.String?
+  public let lastPaymentAmount: Swift.String?
+  public let lastActiveDate: Swift.String?
+  public let totalSessions: Swift.String?
+  @available(*, deprecated, message: "Use config.entitlements.iap.productId from remote config instead")
+  public let iapProductId: Swift.String?
+  public let custom: [Swift.String : Swift.String]
+  public init(email: Swift.String? = nil, firstName: Swift.String? = nil, lastName: Swift.String? = nil, phoneNumber: Swift.String? = nil, postalCode: Swift.String? = nil, city: Swift.String? = nil, state: Swift.String? = nil, countryCode: Swift.String? = nil, latitude: Swift.String? = nil, longitude: Swift.String? = nil, age: Swift.Int? = nil, dateOfBirth: Swift.String? = nil, gender: Swift.String? = nil, language: Swift.String? = nil, subscriptionTier: Swift.String? = nil, monthsSubscribed: Swift.String? = nil, billingCycle: Swift.String? = nil, lastPaymentAmount: Swift.String? = nil, lastActiveDate: Swift.String? = nil, totalSessions: Swift.String? = nil, iapProductId: Swift.String? = nil, custom: [Swift.String : Swift.String] = [:])
+  public init(from decoder: any Swift.Decoder) throws
+  public static func == (a: UserAttributes, b: UserAttributes) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+@available(*, deprecated, renamed: "UserAttributes")
+public typealias EncoreAttributes = UserAttributes
+public struct AppearanceConfig : Swift.Sendable, Swift.Equatable {
+  public var accentColor: Swift.String?
+  public var backgroundColor: Swift.String?
+  public var surfaceColor: Swift.String?
+  public var textColor: Swift.String?
+  public var secondaryTextColor: Swift.String?
+  public var trackColor: Swift.String?
+  public var onAccentColor: Swift.String?
+  public var colorScheme: AppearanceConfig.ColorScheme?
+  public var backgroundEndColor: Swift.String?
+  public var fontFamily: Swift.String?
+  public var countdownFontFamily: Swift.String?
+  public var cornerRadius: CoreFoundation.CGFloat?
+  public var shadow: EncoreShadow?
+  public var borderWidth: CoreFoundation.CGFloat?
+  public var borderColor: Swift.String?
+  public var backgroundImage: Swift.String?
+  public var backgroundImageCapInsets: SwiftUICore.EdgeInsets?
+  public var iconImage: Swift.String?
+  public var sheet: SheetAppearance?
+  public enum ColorScheme : Swift.String, Swift.Sendable, Swift.CaseIterable {
+    case system
+    case light
+    case dark
+    public init?(rawValue: Swift.String)
+    public typealias AllCases = [AppearanceConfig.ColorScheme]
+    public typealias RawValue = Swift.String
+    nonisolated public static var allCases: [AppearanceConfig.ColorScheme] {
+      get
+    }
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public init(accentColor: Swift.String? = nil, backgroundColor: Swift.String? = nil, textColor: Swift.String? = nil)
+  @_disfavoredOverload public init(accentColor: Swift.String? = nil, backgroundColor: Swift.String? = nil, backgroundEndColor: Swift.String? = nil, textColor: Swift.String? = nil, secondaryTextColor: Swift.String? = nil, trackColor: Swift.String? = nil, onAccentColor: Swift.String? = nil, colorScheme: AppearanceConfig.ColorScheme? = nil)
+  @_disfavoredOverload public init(accentColor: Swift.String? = nil, backgroundColor: Swift.String? = nil, backgroundEndColor: Swift.String? = nil, textColor: Swift.String? = nil, secondaryTextColor: Swift.String? = nil, trackColor: Swift.String? = nil, onAccentColor: Swift.String? = nil, colorScheme: AppearanceConfig.ColorScheme? = nil, fontFamily: Swift.String? = nil, countdownFontFamily: Swift.String? = nil, cornerRadius: CoreFoundation.CGFloat? = nil, shadow: EncoreShadow? = nil, borderWidth: CoreFoundation.CGFloat? = nil, borderColor: Swift.String? = nil, backgroundImage: Swift.String? = nil, backgroundImageCapInsets: SwiftUICore.EdgeInsets? = nil, iconImage: Swift.String? = nil)
+  public init(accentColor: Swift.String? = nil, backgroundColor: Swift.String? = nil, backgroundEndColor: Swift.String? = nil, textColor: Swift.String? = nil, secondaryTextColor: Swift.String? = nil, trackColor: Swift.String? = nil, onAccentColor: Swift.String? = nil, colorScheme: AppearanceConfig.ColorScheme? = nil, fontFamily: Swift.String? = nil, countdownFontFamily: Swift.String? = nil, cornerRadius: CoreFoundation.CGFloat? = nil, shadow: EncoreShadow? = nil, borderWidth: CoreFoundation.CGFloat? = nil, borderColor: Swift.String? = nil, backgroundImage: Swift.String? = nil, backgroundImageCapInsets: SwiftUICore.EdgeInsets? = nil, iconImage: Swift.String? = nil, sheet: SheetAppearance?)
+  public init(accentColor: Swift.String? = nil, backgroundColor: Swift.String? = nil, surfaceColor: Swift.String?, backgroundEndColor: Swift.String? = nil, textColor: Swift.String? = nil, secondaryTextColor: Swift.String? = nil, trackColor: Swift.String? = nil, onAccentColor: Swift.String? = nil, colorScheme: AppearanceConfig.ColorScheme? = nil, fontFamily: Swift.String? = nil, countdownFontFamily: Swift.String? = nil, cornerRadius: CoreFoundation.CGFloat? = nil, shadow: EncoreShadow? = nil, borderWidth: CoreFoundation.CGFloat? = nil, borderColor: Swift.String? = nil, backgroundImage: Swift.String? = nil, backgroundImageCapInsets: SwiftUICore.EdgeInsets? = nil, iconImage: Swift.String? = nil, sheet: SheetAppearance? = nil)
+  public static func == (a: AppearanceConfig, b: AppearanceConfig) -> Swift.Bool
+}
+public enum EncoreShadow : Swift.String, Swift.Sendable, Swift.CaseIterable {
+  case flat
+  case soft
+  case strong
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [EncoreShadow]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [EncoreShadow] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct SheetAppearance : Swift.Sendable, Swift.Equatable {
+  public var headingFontFamily: Swift.String?
+  public var bodyFontFamily: Swift.String?
+  public var components: [SheetComponent : SheetComponentStyle]
+  public init(headingFontFamily: Swift.String? = nil, bodyFontFamily: Swift.String? = nil, components: [SheetComponent : SheetComponentStyle] = [:])
+  public static func == (a: SheetAppearance, b: SheetAppearance) -> Swift.Bool
+}
+public struct SheetComponent : Swift.RawRepresentable, Swift.Hashable, Swift.Sendable, Swift.ExpressibleByStringLiteral {
+  public let rawValue: Swift.String
+  public init(rawValue: Swift.String)
+  public init(_ name: Swift.String)
+  public init(stringLiteral value: Swift.String)
+  public static let sheetBackground: SheetComponent
+  public static let closeButton: SheetComponent
+  public static let title: SheetComponent
+  public static let subtitle: SheetComponent
+  public static let footnote: SheetComponent
+  public static let offerRow: SheetComponent
+  public static let offerRowSelected: SheetComponent
+  public static let offerCard: SheetComponent
+  public static let selectionIndicator: SheetComponent
+  public static let offerLogo: SheetComponent
+  public static let offerTitle: SheetComponent
+  public static let offerDetail: SheetComponent
+  public static let badge: SheetComponent
+  public static let primaryButton: SheetComponent
+  public static let secondaryButton: SheetComponent
+  public static let linkButton: SheetComponent
+  public static let filterChip: SheetComponent
+  public static let pageIndicator: SheetComponent
+  public static let footer: SheetComponent
+  public static let panel: SheetComponent
+  public static let stepList: SheetComponent
+  public static let stepMarker: SheetComponent
+  public static let stepMarkerCurrent: SheetComponent
+  public static let stepTitle: SheetComponent
+  public static let stepDetail: SheetComponent
+  public static let summaryCard: SheetComponent
+  public static let statusIcon: SheetComponent
+  public static let giftBox: SheetComponent
+  public static let heroImage: SheetComponent
+  public static let giftBoxImage: SheetComponent
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.String
+  public typealias RawValue = Swift.String
+  public typealias StringLiteralType = Swift.String
+  public typealias UnicodeScalarLiteralType = Swift.String
+}
+public struct SheetAnimation : Swift.Sendable, Swift.Equatable {
+  public var url: Foundation.URL
+  public var fallbackImage: Foundation.URL
+  public var loop: Swift.Bool?
+  public var autoplay: Swift.Bool?
+  public var images: [Swift.String : SheetAnimationImage]?
+  public init(url: Foundation.URL, fallbackImage: Foundation.URL, loop: Swift.Bool? = nil, autoplay: Swift.Bool? = nil, images: [Swift.String : SheetAnimationImage]? = nil)
+  public static func == (a: SheetAnimation, b: SheetAnimation) -> Swift.Bool
+}
+public enum SheetOfferPicture : Swift.String, Swift.Sendable, Swift.CaseIterable {
+  case logo, hero, primaryCreative
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [SheetOfferPicture]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [SheetOfferPicture] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct SheetAnimationImage : Swift.Sendable, Swift.Equatable {
+  public var offer: Swift.Int
+  public var picture: SheetOfferPicture
+  public init(offer: Swift.Int, picture: SheetOfferPicture)
+  public static func == (a: SheetAnimationImage, b: SheetAnimationImage) -> Swift.Bool
+}
+public enum SheetMotionCurve : Swift.String, Swift.Sendable, Swift.CaseIterable {
+  case linear, easeIn, easeOut, easeInOut
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [SheetMotionCurve]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [SheetMotionCurve] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct SheetPose : Swift.Sendable, Swift.Equatable {
+  public var scale: Swift.Double?
+  public var opacity: Swift.Double?
+  public var rotation: Swift.Double?
+  public var offsetX: Swift.Double?
+  public var offsetY: Swift.Double?
+  public init(scale: Swift.Double? = nil, opacity: Swift.Double? = nil, rotation: Swift.Double? = nil, offsetX: Swift.Double? = nil, offsetY: Swift.Double? = nil)
+  public static func == (a: SheetPose, b: SheetPose) -> Swift.Bool
+}
+public struct SheetEnter : Swift.Sendable, Swift.Equatable {
+  public var from: SheetPose
+  public var duration: Swift.Double
+  public var delay: Swift.Double?
+  public var curve: SheetMotionCurve?
+  public init(from: SheetPose, duration: Swift.Double, delay: Swift.Double? = nil, curve: SheetMotionCurve? = nil)
+  public static func == (a: SheetEnter, b: SheetEnter) -> Swift.Bool
+}
+public struct SheetKeyframe : Swift.Sendable, Swift.Equatable {
+  public var at: Swift.Double
+  public var pose: SheetPose
+  public init(at: Swift.Double, pose: SheetPose)
+  public static func == (a: SheetKeyframe, b: SheetKeyframe) -> Swift.Bool
+}
+public struct SheetLoop : Swift.Sendable, Swift.Equatable {
+  public var duration: Swift.Double
+  public var keyframes: [SheetKeyframe]
+  public var curve: SheetMotionCurve?
+  public var phaseOffset: Swift.Double?
+  public var reducedMotion: SheetPose?
+  public var delay: Swift.Double?
+  public var repeatCount: Swift.Int?
+  public init(duration: Swift.Double, keyframes: [SheetKeyframe], curve: SheetMotionCurve? = nil, phaseOffset: Swift.Double? = nil, reducedMotion: SheetPose? = nil, delay: Swift.Double? = nil, repeatCount: Swift.Int? = nil)
+  public static func == (a: SheetLoop, b: SheetLoop) -> Swift.Bool
+}
+public struct SheetComponentStyle : Swift.Sendable, Swift.Equatable {
+  public enum FontRole : Swift.String, Swift.Sendable, Swift.CaseIterable {
+    case heading
+    case body
+    public init?(rawValue: Swift.String)
+    public typealias AllCases = [SheetComponentStyle.FontRole]
+    public typealias RawValue = Swift.String
+    nonisolated public static var allCases: [SheetComponentStyle.FontRole] {
+      get
+    }
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public var fill: SheetColor?
+  public var cornerRadius: CoreFoundation.CGFloat?
+  public var borderWidth: CoreFoundation.CGFloat?
+  public var borderColor: SheetColor?
+  public var contentColor: SheetColor?
+  public var font: SheetComponentStyle.FontRole?
+  public var image: Foundation.URL?
+  public var trueImage: Foundation.URL?
+  public var falseImage: Foundation.URL?
+  public var backgroundImage: Foundation.URL?
+  public var animation: SheetAnimation?
+  public var enter: SheetEnter?
+  public var loop: SheetLoop?
+  public init(fill: SheetColor? = nil, cornerRadius: CoreFoundation.CGFloat? = nil, borderWidth: CoreFoundation.CGFloat? = nil, borderColor: SheetColor? = nil, contentColor: SheetColor? = nil, font: SheetComponentStyle.FontRole? = nil, image: Foundation.URL? = nil, trueImage: Foundation.URL? = nil, falseImage: Foundation.URL? = nil, backgroundImage: Foundation.URL? = nil)
+  @_disfavoredOverload public init(fill: SheetColor? = nil, cornerRadius: CoreFoundation.CGFloat? = nil, borderWidth: CoreFoundation.CGFloat? = nil, borderColor: SheetColor? = nil, contentColor: SheetColor? = nil, font: SheetComponentStyle.FontRole? = nil, image: Foundation.URL? = nil, trueImage: Foundation.URL? = nil, falseImage: Foundation.URL? = nil, backgroundImage: Foundation.URL? = nil, animation: SheetAnimation? = nil, enter: SheetEnter? = nil, loop: SheetLoop? = nil)
+  public static func == (a: SheetComponentStyle, b: SheetComponentStyle) -> Swift.Bool
+}
+public struct SheetColor : Swift.Sendable, Swift.Equatable, Swift.ExpressibleByStringLiteral {
+  public let light: Swift.String
+  public let dark: Swift.String
+  public init(_ hex: Swift.String)
+  public init(light: Swift.String, dark: Swift.String)
+  public init(stringLiteral value: Swift.String)
+  public static func == (a: SheetColor, b: SheetColor) -> Swift.Bool
+  public typealias ExtendedGraphemeClusterLiteralType = Swift.String
+  public typealias StringLiteralType = Swift.String
+  public typealias UnicodeScalarLiteralType = Swift.String
+}
+public enum UseCase : Swift.String, Swift.Sendable, Swift.CaseIterable, Swift.Equatable {
+  case reduceChurn
+  case rewardUsers
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [UseCase]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [UseCase] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum UnlockMode : Swift.Sendable {
+  case optimistic
+  case strict
+  public static func == (a: UnlockMode, b: UnlockMode) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum Cohort : Swift.String, Swift.Codable, Swift.Sendable {
+  case treatment
+  case control
+  case notEnrolled
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension Encore {
+  public enum LogLevel : Swift.Int, Swift.Comparable, Swift.Sendable {
+    case none
+    case error
+    case warn
+    case info
+    case debug
+    public static func < (lhs: Encore.LogLevel, rhs: Encore.LogLevel) -> Swift.Bool
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+}
+public enum EntitlementUnit : Swift.CustomStringConvertible, Swift.Sendable {
+  case months
+  case days
+  case percent
+  case dollars
+  public var description: Swift.String {
+    get
+  }
+  public static func == (a: EntitlementUnit, b: EntitlementUnit) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum Entitlement : Swift.Sendable {
+  case freeTrial(value: Swift.Double? = nil, unit: EntitlementUnit? = nil)
+  case discount(value: Swift.Double? = nil, unit: EntitlementUnit? = nil)
+  case credit(value: Swift.Double? = nil, unit: EntitlementUnit? = nil)
+}
+public enum EntitlementScope : Swift.Sendable {
+  case verified
+  case all
+  public static func == (a: EntitlementScope, b: EntitlementScope) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum Moment : Swift.Sendable, Swift.Equatable {
+  case streak(Swift.Int)
+  case milestone(Swift.Int)
+  case lapse(days: Swift.Int)
+  case paywallAbandon(Swift.Int)
+  case purchase(amount: Swift.Double, currency: Swift.String? = nil)
+  case action(Swift.String, count: Swift.Int? = nil)
+  case custom(Swift.String, value: Swift.Double? = nil)
+  public static func == (a: Moment, b: Moment) -> Swift.Bool
+}
+public enum PlacementLocation : Swift.String, Swift.Sendable, Swift.Equatable, Swift.CaseIterable {
+  case home
+  case settings
+  case results
+  case inFlow
+  case notification
+  case email
+  case custom
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [PlacementLocation]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [PlacementLocation] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum TriggerStyle : Swift.String, Swift.Sendable, Swift.Equatable, Swift.CaseIterable {
+  case embedded
+  case standalone
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [TriggerStyle]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [TriggerStyle] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum PlacementOutcome : Swift.Sendable {
+  case presentation(placementId: Swift.String, result: PresentationResult)
+  case strictUnlockVerified(transactionId: Swift.String)
+}
+public enum DismissReason : Swift.String, Swift.CaseIterable, Swift.Equatable, Swift.Sendable {
+  case userTappedClose
+  case userSwipedDown
+  case userCancelled
+  case lastOfferDeclined
+  case dismissed
+  case cooldown
+  case flowCompleted
+  case interrupted
+  case offerClaimed
+  case appBackgrounded
+  case appTerminated
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [DismissReason]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [DismissReason] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@available(*, deprecated, renamed: "DismissReason")
+public typealias NotGrantedReason = DismissReason
+public enum NotPresentedReason : Swift.Equatable, Swift.Sendable {
+  case notConfigured
+  case alreadyPresenting
+  case unsupportedOS
+  case noOffers
+  case experimentControl
+  case useCaseUnavailable
+  case disabled
+  case error(EncoreError)
+  public static func == (a: NotPresentedReason, b: NotPresentedReason) -> Swift.Bool
+}
+public struct ClaimedOffer : Swift.Sendable, Swift.Equatable {
+  public let offerId: Swift.String
+  public let campaignId: Swift.String
+  public let advertiserName: Swift.String
+  public let transactionId: Swift.String?
+  public let userConfirmedCompletion: Swift.Bool
+  public let claimURL: Swift.String?
+  public init(offerId: Swift.String? = nil, campaignId: Swift.String, advertiserName: Swift.String, transactionId: Swift.String? = nil)
+  public init(offerId: Swift.String? = nil, campaignId: Swift.String, advertiserName: Swift.String, transactionId: Swift.String? = nil, userConfirmedCompletion: Swift.Bool)
+  public init(offerId: Swift.String? = nil, campaignId: Swift.String, advertiserName: Swift.String, transactionId: Swift.String? = nil, userConfirmedCompletion: Swift.Bool = false, claimURL: Swift.String?)
+  public static func == (a: ClaimedOffer, b: ClaimedOffer) -> Swift.Bool
+}
+extension ClaimedOffer : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+public enum AdvertiserOutcome : Swift.Sendable, Swift.Equatable {
+  case notAttempted
+  case claimed(ClaimedOffer)
+  case verified(ClaimedOffer)
+  case cooldown
+  case failed(EncoreError)
+  public static func == (a: AdvertiserOutcome, b: AdvertiserOutcome) -> Swift.Bool
+}
+public enum PublisherOutcome : Swift.Sendable, Swift.Equatable {
+  case notAttempted
+  case purchased
+  case cancelled
+  case pending
+  case failed
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: PublisherOutcome, b: PublisherOutcome) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum PresentationResult : Swift.Sendable, Swift.Equatable {
+  case notPresented(NotPresentedReason)
+  case presented(PresentationResult.Outcome)
+  public struct Outcome : Swift.Sendable, Swift.Equatable {
+    public let advertiser: AdvertiserOutcome
+    public let publisher: PublisherOutcome
+    public let dismissal: DismissReason
+    public init(advertiser: AdvertiserOutcome = .notAttempted, publisher: PublisherOutcome = .notAttempted, dismissal: DismissReason)
+    public static func == (a: PresentationResult.Outcome, b: PresentationResult.Outcome) -> Swift.Bool
+  }
+  public static func == (a: PresentationResult, b: PresentationResult) -> Swift.Bool
+}
+extension PresentationResult {
+  public var claim: ClaimedOffer? {
+    get
+  }
+  public var advertiser: AdvertiserOutcome? {
+    get
+  }
+  public var publisher: PublisherOutcome? {
+    get
+  }
+  public var dismissal: DismissReason? {
+    get
+  }
+  public var error: EncoreError? {
+    get
+  }
+}
+@available(*, deprecated, renamed: "PresentationResult")
+public typealias EncorePresentationResult = PresentationResult
+public struct PublisherReward : Swift.Sendable, Swift.Equatable {
+  public let id: Swift.String
+  public let title: Swift.String
+  public let detail: Swift.String?
+  public let iconUrl: Foundation.URL?
+  public init(id: Swift.String, title: Swift.String, detail: Swift.String? = nil, iconUrl: Foundation.URL? = nil)
+  public static func == (a: PublisherReward, b: PublisherReward) -> Swift.Bool
+}
+public struct PublisherRewardPolicy : Swift.Sendable, Swift.Equatable {
+  public static let maxDailyLimit: Swift.Int
+  public let dailyLimit: Swift.Int
+  public init(dailyLimit: Swift.Int = 3)
+  public static func == (a: PublisherRewardPolicy, b: PublisherRewardPolicy) -> Swift.Bool
+}
+final public class Atomic<T> : @unchecked Swift.Sendable where T : Swift.Sendable {
+  public init(_ value: T)
+  final public var value: T {
+    get
+    set
+  }
+  final public func mutate(_ transform: (inout T) -> Swift.Void)
+  @discardableResult
+  final public func mutate<R>(_ transform: (inout T) -> R) -> R
+  @objc deinit
+}
+@_Concurrency.MainActor @preconcurrency public struct ClaimReminder : SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public init(placement: Swift.String, useCase: UseCase = .rewardUsers, icon: TriggerIcon = .gift, appearance: AppearanceConfig? = nil, publisherReward: PublisherReward? = nil, onResult: ((PresentationResult) -> Swift.Void)? = nil, values: [Swift.String : Swift.String] = [:], alignment: EncoreAlignment = .center)
+  @_Concurrency.MainActor @preconcurrency public var body: some SwiftUICore.View {
+    get
+  }
+  @_Concurrency.MainActor @preconcurrency public func headline(_ text: Swift.String?) -> ClaimReminder
+  @_Concurrency.MainActor @preconcurrency public func subheadline(_ text: Swift.String?) -> ClaimReminder
+  @_Concurrency.MainActor @preconcurrency public func cta(_ text: Swift.String?) -> ClaimReminder
+  @_Concurrency.MainActor @preconcurrency public func sheetHeadline(_ text: Swift.String?) -> ClaimReminder
+  @_Concurrency.MainActor @preconcurrency public func sheetSubheadline(_ text: Swift.String?) -> ClaimReminder
+  @_Concurrency.MainActor @preconcurrency public func moment(_ moment: Moment?) -> ClaimReminder
+  public typealias Body = @_opaqueReturnTypeOf("$s6Encore13ClaimReminderV4bodyQrvp", 0) __
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class ClaimReminderView : EncoreTriggerView {
+  @_Concurrency.MainActor @preconcurrency convenience public init(placement: Swift.String, useCase: UseCase = .rewardUsers, icon: TriggerIcon = .gift, appearance: AppearanceConfig? = nil, publisherReward: PublisherReward? = nil, onResult: ((PresentationResult) -> Swift.Void)? = nil, values: [Swift.String : Swift.String] = [:], alignment: EncoreAlignment = .center)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor final public class EncoreClaim : Combine.ObservableObject {
+  public enum State : Swift.Equatable, Swift.Sendable {
+    case hidden
+    case gifts(EncoreClaim.Gifts)
+    case reminder(EncoreClaim.Reminder)
+    case thanks(EncoreClaim.Gifts)
+    public static func == (a: EncoreClaim.State, b: EncoreClaim.State) -> Swift.Bool
+  }
+  public struct Gifts : Swift.Equatable, Swift.Sendable {
+    public let offerCount: Swift.Int
+    public let logoURLs: [Foundation.URL]
+    public static func == (a: EncoreClaim.Gifts, b: EncoreClaim.Gifts) -> Swift.Bool
+  }
+  public struct Reminder : Swift.Equatable, Swift.Sendable {
+    public let advertiserName: Swift.String
+    public let logoURL: Foundation.URL?
+    public let perk: Swift.String?
+    public let claimedAt: Foundation.Date
+    public let deadline: Foundation.Date
+    public let claimCount: Swift.Int
+    public let transactionId: Swift.String
+    public static func == (a: EncoreClaim.Reminder, b: EncoreClaim.Reminder) -> Swift.Bool
+  }
+  public enum Target : Swift.String, Swift.Sendable, Swift.CaseIterable {
+    case button, card, arrow
+    public init?(rawValue: Swift.String)
+    public typealias AllCases = [EncoreClaim.Target]
+    public typealias RawValue = Swift.String
+    nonisolated public static var allCases: [EncoreClaim.Target] {
+      get
+    }
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  @Combine.Published @_projectedValueProperty($state) @_Concurrency.MainActor final public var state: EncoreClaim.State {
+    get
+  }
+  @_Concurrency.MainActor final public var $state: Combine.Published<EncoreClaim.State>.Publisher {
+    get
+  }
+  @_Concurrency.MainActor final public var hasOffers: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor final public var hasOffersPublisher: Combine.AnyPublisher<Swift.Bool, Swift.Never> {
+    get
+  }
+  @_Concurrency.MainActor final public var onResult: ((PresentationResult) -> Swift.Void)?
+  @_Concurrency.MainActor final public var publisherReward: PublisherReward? {
+    get
+    set
+  }
+  @_Concurrency.MainActor final public var moment: Moment? {
+    get
+  }
+  @discardableResult
+  @_Concurrency.MainActor final public func moment(_ moment: Moment?) -> EncoreClaim
+  @_Concurrency.MainActor final public var sheetHeadline: Swift.String? {
+    get
+    set
+  }
+  @_Concurrency.MainActor final public var sheetSubheadline: Swift.String? {
+    get
+    set
+  }
+  @_Concurrency.MainActor final public func setVisible(_ fraction: Swift.Double)
+  @discardableResult
+  @_Concurrency.MainActor final public func tap(target: EncoreClaim.Target = .button) async -> PresentationResult
+  @_Concurrency.MainActor final public func dismiss()
+  @_Concurrency.MainActor final public func bind(_ view: UIKit.UIView, handlesTap: Swift.Bool = true) -> () -> Swift.Void
+  public typealias ObjectWillChangePublisher = Combine.ObservableObjectPublisher
+  @objc deinit
+}
+extension Encore {
+  @_Concurrency.MainActor public static func claim(placement: Swift.String, useCase: UseCase = .rewardUsers, autoOpen: AutoOpen? = nil, publisherReward: PublisherReward? = nil, sheetHeadline: Swift.String? = nil, sheetSubheadline: Swift.String? = nil, onResult: ((PresentationResult) -> Swift.Void)? = nil) -> EncoreClaim
+  @_documentation(visibility: internal) @_Concurrency.MainActor public static func claim(placement: Swift.String, useCase: UseCase, autoOpen: AutoOpen?, publisherReward: PublisherReward?, onResult: ((PresentationResult) -> Swift.Void)?) -> EncoreClaim
+}
+extension SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public func encoreClaim(_ claim: EncoreClaim, handlesTap: Swift.Bool = true) -> some SwiftUICore.View
+  
+}
+extension SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public func encoreClaim(placement: Swift.String, useCase: UseCase = .rewardUsers, autoOpen: AutoOpen? = nil, publisherReward: PublisherReward? = nil, sheetHeadline: Swift.String? = nil, sheetSubheadline: Swift.String? = nil, onResult: ((PresentationResult) -> Swift.Void)? = nil) -> some SwiftUICore.View
+  
+}
+public enum PresentOutcome : Swift.Equatable, Swift.Sendable {
+  case shown(PresentedMode)
+  case suppressed(PresentSuppressedReason)
+  public static func == (a: PresentOutcome, b: PresentOutcome) -> Swift.Bool
+}
+public enum PresentSuppressedReason : Swift.String, Swift.Equatable, Swift.Sendable, Swift.CaseIterable {
+  case noLook
+  case unavailable
+  case unrenderable
+  case disabled
+  case unsupportedOS
+  case background
+  case sheetUp
+  case firstSession
+  case dismissBackoff
+  case placementDay
+  case session
+  case day
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [PresentSuppressedReason]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [PresentSuppressedReason] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+extension EncoreClaim {
+  @_Concurrency.MainActor final public func present() async -> PresentOutcome
+}
+@_Concurrency.MainActor @preconcurrency public struct GiftsButton : SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public init(placement: Swift.String, useCase: UseCase = .rewardUsers, autoOpen: AutoOpen? = nil, icon: TriggerIcon = .gift, appearance: AppearanceConfig? = nil, publisherReward: PublisherReward? = nil, onResult: ((PresentationResult) -> Swift.Void)? = nil, values: [Swift.String : Swift.String] = [:], alignment: EncoreAlignment = .center)
+  @_Concurrency.MainActor @preconcurrency public var body: some SwiftUICore.View {
+    get
+  }
+  @_Concurrency.MainActor @preconcurrency public func moment(_ moment: Moment?) -> GiftsButton
+  @_Concurrency.MainActor @preconcurrency public func hostState(_ state: GiftsButtonHostState?) -> GiftsButton
+  @_Concurrency.MainActor @preconcurrency public func onShowingChange(_ action: @escaping (Swift.Bool) -> Swift.Void) -> GiftsButton
+  @_Concurrency.MainActor @preconcurrency public func headline(_ text: Swift.String?) -> GiftsButton
+  @_Concurrency.MainActor @preconcurrency public func subheadline(_ text: Swift.String?) -> GiftsButton
+  @_Concurrency.MainActor @preconcurrency public func cta(_ text: Swift.String?) -> GiftsButton
+  @_Concurrency.MainActor @preconcurrency public func sheetHeadline(_ text: Swift.String?) -> GiftsButton
+  @_Concurrency.MainActor @preconcurrency public func sheetSubheadline(_ text: Swift.String?) -> GiftsButton
+  public typealias Body = @_opaqueReturnTypeOf("$s6Encore11GiftsButtonV4bodyQrvp", 0) __
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class GiftsButtonView : EncoreTriggerView {
+  @_Concurrency.MainActor @preconcurrency final public var hostState: GiftsButtonHostState? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency final public var onShowingChange: ((Swift.Bool) -> Swift.Void)? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency convenience public init(placement: Swift.String, useCase: UseCase = .rewardUsers, autoOpen: AutoOpen? = nil, icon: TriggerIcon = .gift, appearance: AppearanceConfig? = nil, publisherReward: PublisherReward? = nil, onResult: ((PresentationResult) -> Swift.Void)? = nil, values: [Swift.String : Swift.String] = [:], alignment: EncoreAlignment = .center)
+  @objc deinit
+}
+public struct GiftsButtonHostState : Swift.Equatable, Swift.Sendable {
+  public enum Status : Swift.String, Swift.Sendable, Swift.CaseIterable {
+    case locked
+    case ready
+    case done
+    public init?(rawValue: Swift.String)
+    public typealias AllCases = [GiftsButtonHostState.Status]
+    public typealias RawValue = Swift.String
+    nonisolated public static var allCases: [GiftsButtonHostState.Status] {
+      get
+    }
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public let status: GiftsButtonHostState.Status
+  public let progress: Swift.Double?
+  public init(status: GiftsButtonHostState.Status, progress: Swift.Double? = nil)
+  public static func locked(progress: Swift.Double? = nil) -> GiftsButtonHostState
+  public static func locked(completed: Swift.Int, of total: Swift.Int) -> GiftsButtonHostState
+  public static let ready: GiftsButtonHostState
+  public static let done: GiftsButtonHostState
+  public static func == (a: GiftsButtonHostState, b: GiftsButtonHostState) -> Swift.Bool
+}
+
+@_Concurrency.MainActor public protocol PlacementBuilderProtocol {
+  @_Concurrency.MainActor var id: Swift.String { get }
+  @_Concurrency.MainActor func show() async -> PresentationResult
+  @_Concurrency.MainActor func show(resume: @escaping @Sendable (PresentationResult) -> Swift.Void)
+  @_Concurrency.MainActor func makeViewController() async -> UIKit.UIViewController?
+  @_Concurrency.MainActor func makeViewController(resume: @escaping @Sendable (PresentationResult) -> Swift.Void) async -> UIKit.UIViewController?
+  @_Concurrency.MainActor func prefetch()
+  @_Concurrency.MainActor func hasOffers() async -> Swift.Bool
+  @_Concurrency.MainActor func onLoadingStateChange(_ callback: @escaping @Sendable (Swift.Bool) -> Swift.Void) -> Self
+  @_Concurrency.MainActor func useCase(_ useCase: UseCase) -> Self
+  @_Concurrency.MainActor func headline(_ text: Swift.String) -> Self
+  @_Concurrency.MainActor func subheadline(_ text: Swift.String) -> Self
+  @_Concurrency.MainActor func cta(_ text: Swift.String) -> Self
+  @_Concurrency.MainActor func decline(_ text: Swift.String) -> Self
+  @_Concurrency.MainActor func badge(_ text: Swift.String) -> Self
+  @_Concurrency.MainActor func appearance(_ config: AppearanceConfig) -> Self
+  @_Concurrency.MainActor func moment(_ moment: Moment) -> Self
+  @_Concurrency.MainActor func publisherReward(_ reward: PublisherReward) -> Self
+}
+extension PlacementBuilderProtocol {
+  @_Concurrency.MainActor public func moment(_ moment: Moment) -> Self
+  @_Concurrency.MainActor public func location(_ location: PlacementLocation) -> Self
+  @_Concurrency.MainActor public func trigger(_ style: TriggerStyle) -> Self
+  @_Concurrency.MainActor public func appearance(_ config: AppearanceConfig) -> Self
+  @_Concurrency.MainActor public func publisherReward(_ reward: PublisherReward) -> Self
+  @_Concurrency.MainActor public func cta(_ text: Swift.String) -> Self
+  @_Concurrency.MainActor public func decline(_ text: Swift.String) -> Self
+  @_Concurrency.MainActor public func badge(_ text: Swift.String) -> Self
+  @_Concurrency.MainActor public func show(resume: @escaping @Sendable (PresentationResult) -> Swift.Void)
+  @_Concurrency.MainActor public func prefetch()
+  @_Concurrency.MainActor public func hasOffers() async -> Swift.Bool
+  @_Concurrency.MainActor public func makeViewController(resume: @escaping @Sendable (PresentationResult) -> Swift.Void) async -> UIKit.UIViewController?
+  @_Concurrency.MainActor public func makeViewController() async -> UIKit.UIViewController?
+}
+extension SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public func moment(_ moment: Moment?) -> some SwiftUICore.View
+  
+}
+public enum AutoOpen : Swift.String, Swift.Sendable, Swift.Equatable, Swift.CaseIterable {
+  case off
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [AutoOpen]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [AutoOpen] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum EncoreAlignment : Swift.String, Swift.Sendable, Swift.CaseIterable {
+  case leading
+  case center
+  case trailing
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [EncoreAlignment]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [EncoreAlignment] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_Concurrency.MainActor @preconcurrency public struct EncoreTrigger : SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public init(_ id: Swift.String, placement: Swift.String, useCase: UseCase = .rewardUsers, autoOpen: AutoOpen? = nil, icon: TriggerIcon = .gift, appearance: AppearanceConfig? = nil, publisherReward: PublisherReward? = nil, onResult: ((PresentationResult) -> Swift.Void)? = nil, values: [Swift.String : Swift.String] = [:], alignment: EncoreAlignment = .center)
+  @_Concurrency.MainActor @preconcurrency public var body: some SwiftUICore.View {
+    get
+  }
+  public typealias Body = @_opaqueReturnTypeOf("$s6Encore0A7TriggerV4bodyQrvp", 0) __
+}
+extension EncoreTrigger {
+  @_Concurrency.MainActor @preconcurrency public func headline(_ text: Swift.String?) -> EncoreTrigger
+  @_Concurrency.MainActor @preconcurrency public func subheadline(_ text: Swift.String?) -> EncoreTrigger
+  @_Concurrency.MainActor @preconcurrency public func cta(_ text: Swift.String?) -> EncoreTrigger
+  @_Concurrency.MainActor @preconcurrency public func sheetHeadline(_ text: Swift.String?) -> EncoreTrigger
+  @_Concurrency.MainActor @preconcurrency public func sheetSubheadline(_ text: Swift.String?) -> EncoreTrigger
+  @_Concurrency.MainActor @preconcurrency public func moment(_ moment: Moment?) -> EncoreTrigger
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency public class EncoreTriggerView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency public var moment: Moment? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var appearance: AppearanceConfig? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var useCase: UseCase {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var autoOpen: AutoOpen? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var icon: TriggerIcon {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var publisherReward: PublisherReward? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var onResult: ((PresentationResult) -> Swift.Void)? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var values: [Swift.String : Swift.String] {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var headline: Swift.String? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var subheadline: Swift.String? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var cta: Swift.String? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var sheetHeadline: Swift.String? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var sheetSubheadline: Swift.String? {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency public var alignment: EncoreAlignment {
+    get
+    set
+  }
+  @_Concurrency.MainActor @preconcurrency convenience public init(id: Swift.String, placement: Swift.String, useCase: UseCase = .rewardUsers, autoOpen: AutoOpen? = nil, icon: TriggerIcon = .gift, appearance: AppearanceConfig? = nil, values: [Swift.String : Swift.String] = [:], alignment: EncoreAlignment = .center)
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func didMoveToWindow()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public var intrinsicContentSize: CoreFoundation.CGSize {
+    @objc get
+  }
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func sizeThatFits(_ offered: CoreFoundation.CGSize) -> CoreFoundation.CGSize
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func layoutSubviews()
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic public func invalidateIntrinsicContentSize()
+  @objc deinit
+}
+public enum PresentedMode : Swift.String, Swift.CaseIterable, Swift.Sendable, Swift.Hashable {
+  case popup
+  case halfSheet
+  case fullScreen
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [PresentedMode]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [PresentedMode] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum TriggerIcon : Swift.String, Swift.Sendable, Swift.Hashable, Swift.CaseIterable {
+  case gift
+  case appIcon
+  case none
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [TriggerIcon]
+  public typealias RawValue = Swift.String
+  nonisolated public static var allCases: [TriggerIcon] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_Concurrency.MainActor public protocol EncoreProtocol : AnyObject {
+  @_Concurrency.MainActor var isClaimEnabled: Swift.Bool { get set }
+  @_Concurrency.MainActor var isEnabled: Swift.Bool { get set }
+  @_Concurrency.MainActor func configure(apiKey: Swift.String, purchaseController: (any EncorePurchaseController)?, options: Encore.Options)
+  @_Concurrency.MainActor func identify(userId: Swift.String, attributes: UserAttributes?)
+  @_Concurrency.MainActor func setUserAttributes(_ attributes: UserAttributes)
+  @_Concurrency.MainActor func reset()
+  @_Concurrency.MainActor func placement(_ id: Swift.String?) -> any PlacementBuilderProtocol
+  @_Concurrency.MainActor var outcomes: _Concurrency.AsyncStream<PlacementOutcome> { get }
+  @_Concurrency.MainActor func isActive(_ type: Entitlement, in scope: EntitlementScope) async -> Swift.Bool
+  @_Concurrency.MainActor func isActivePublisher(for type: Entitlement, in scope: EntitlementScope) -> Combine.AnyPublisher<Swift.Bool, Swift.Never>
+  @_Concurrency.MainActor func revokeEntitlements() async throws
+  @_Concurrency.MainActor func revokeEntitlements(onCompletion: @escaping (Swift.Result<Swift.Void, EncoreError>) -> Swift.Void)
+  @_Concurrency.MainActor func setLanguage(_ tag: Swift.String)
+  @_Concurrency.MainActor func clearLanguage()
+}
+extension EncoreProtocol {
+  @_Concurrency.MainActor public var isEnabled: Swift.Bool {
+    get
+    set
+  }
+  @_Concurrency.MainActor public func setLanguage(_ tag: Swift.String)
+  @_Concurrency.MainActor public func clearLanguage()
+}
+@_hasMissingDesignatedInitializers @_Concurrency.MainActor final public class Encore : EncoreProtocol {
+  @_Concurrency.MainActor public static let shared: Encore
+  nonisolated public static var isSupported: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor final public var isClaimEnabled: Swift.Bool {
+    get
+    set
+  }
+  @_Concurrency.MainActor final public var isEnabled: Swift.Bool {
+    get
+    set
+  }
+  @_Concurrency.MainActor final public func configure(apiKey: Swift.String, purchaseController: (any EncorePurchaseController)? = nil, options: Encore.Options = .init())
+  @_Concurrency.MainActor final public func identify(userId: Swift.String, attributes: UserAttributes? = nil)
+  @_Concurrency.MainActor final public func setUserAttributes(_ attributes: UserAttributes)
+  @_Concurrency.MainActor final public func setLanguage(_ tag: Swift.String)
+  @_Concurrency.MainActor final public func clearLanguage()
+  @_Concurrency.MainActor final public func reset()
+  @_Concurrency.MainActor final public var publisherRewardPolicy: PublisherRewardPolicy
+  @_Concurrency.MainActor final public var outcomes: _Concurrency.AsyncStream<PlacementOutcome> {
+    get
+  }
+  @available(*, deprecated, message: "Use the type-level call: placement(_:). Removed in 3.0.")
+  @_Concurrency.MainActor final public func placement(_ id: Swift.String? = nil) -> any PlacementBuilderProtocol
+  @_Concurrency.MainActor public static func placement(_ id: Swift.String? = nil) -> any PlacementBuilderProtocol
+  @_Concurrency.MainActor public static func setPersonalization(_ enabled: Swift.Bool)
+  @_Concurrency.MainActor final public func isActive(_ type: Entitlement, in scope: EntitlementScope = .all) async -> Swift.Bool
+  @_Concurrency.MainActor final public func isActivePublisher(for type: Entitlement, in scope: EntitlementScope = .all) -> Combine.AnyPublisher<Swift.Bool, Swift.Never>
+  @_Concurrency.MainActor final public func revokeEntitlements() async throws
+  @_Concurrency.MainActor final public func revokeEntitlements(onCompletion: @escaping (Swift.Result<Swift.Void, EncoreError>) -> Swift.Void)
+  @objc deinit
+}
+extension Encore {
+  public struct Options : Swift.Sendable {
+    public var logLevel: Encore.LogLevel
+    public var unlock: UnlockMode
+    public var transactionLinking: Swift.Bool
+    public var personalization: Swift.Bool?
+    @_disfavoredOverload public init(logLevel: Encore.LogLevel = .none, unlock: UnlockMode = .optimistic, transactionLinking: Swift.Bool = true, personalization: Swift.Bool? = nil)
+    public init(logLevel: Encore.LogLevel = .none, unlock: UnlockMode = .optimistic, transactionLinking: Swift.Bool = true)
+  }
+}
+extension EncoreError.IntegrationError : Swift.Hashable {}
+extension EncorePurchaseResult : Swift.Equatable {}
+extension EncorePurchaseResult : Swift.Hashable {}
+extension AppearanceConfig.ColorScheme : Swift.Equatable {}
+extension AppearanceConfig.ColorScheme : Swift.Hashable {}
+extension AppearanceConfig.ColorScheme : Swift.RawRepresentable {}
+extension EncoreShadow : Swift.Equatable {}
+extension EncoreShadow : Swift.Hashable {}
+extension EncoreShadow : Swift.RawRepresentable {}
+extension SheetOfferPicture : Swift.Equatable {}
+extension SheetOfferPicture : Swift.Hashable {}
+extension SheetOfferPicture : Swift.RawRepresentable {}
+extension SheetMotionCurve : Swift.Equatable {}
+extension SheetMotionCurve : Swift.Hashable {}
+extension SheetMotionCurve : Swift.RawRepresentable {}
+extension SheetComponentStyle.FontRole : Swift.Equatable {}
+extension SheetComponentStyle.FontRole : Swift.Hashable {}
+extension SheetComponentStyle.FontRole : Swift.RawRepresentable {}
+extension UseCase : Swift.Hashable {}
+extension UseCase : Swift.RawRepresentable {}
+extension UnlockMode : Swift.Equatable {}
+extension UnlockMode : Swift.Hashable {}
+extension Cohort : Swift.Equatable {}
+extension Cohort : Swift.Hashable {}
+extension Cohort : Swift.RawRepresentable {}
+extension Encore : Swift.Sendable {}
+extension Encore.LogLevel : Swift.Hashable {}
+extension Encore.LogLevel : Swift.RawRepresentable {}
+extension EntitlementUnit : Swift.Equatable {}
+extension EntitlementUnit : Swift.Hashable {}
+extension EntitlementScope : Swift.Equatable {}
+extension EntitlementScope : Swift.Hashable {}
+extension PlacementLocation : Swift.Hashable {}
+extension PlacementLocation : Swift.RawRepresentable {}
+extension TriggerStyle : Swift.Hashable {}
+extension TriggerStyle : Swift.RawRepresentable {}
+extension DismissReason : Swift.Hashable {}
+extension DismissReason : Swift.RawRepresentable {}
+extension PublisherOutcome : Swift.Hashable {}
+extension ClaimReminder : Swift.Sendable {}
+extension EncoreClaim : Swift.Sendable {}
+extension EncoreClaim.Target : Swift.Equatable {}
+extension EncoreClaim.Target : Swift.Hashable {}
+extension EncoreClaim.Target : Swift.RawRepresentable {}
+extension PresentSuppressedReason : Swift.Hashable {}
+extension PresentSuppressedReason : Swift.RawRepresentable {}
+extension GiftsButton : Swift.Sendable {}
+extension GiftsButtonHostState.Status : Swift.Equatable {}
+extension GiftsButtonHostState.Status : Swift.Hashable {}
+extension GiftsButtonHostState.Status : Swift.RawRepresentable {}
+extension AutoOpen : Swift.Hashable {}
+extension AutoOpen : Swift.RawRepresentable {}
+extension EncoreAlignment : Swift.Equatable {}
+extension EncoreAlignment : Swift.Hashable {}
+extension EncoreAlignment : Swift.RawRepresentable {}
+extension EncoreTrigger : Swift.Sendable {}
+extension PresentedMode : Swift.RawRepresentable {}
+extension TriggerIcon : Swift.RawRepresentable {}
